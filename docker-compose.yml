@@ -1,0 +1,62 @@
+version: '3'
+
+volumes:
+  db-data:
+    driver: local
+  dynamodb-data:
+    driver: local
+
+services:
+  base: &base
+    hostname: base
+    image: package:request_gn
+    ports: []
+    stdin_open: true
+    tty: true
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    volumes:
+      - .:/home/node/app
+      
+  dynamo:
+    hostname: dynamo
+    image: cnadiminti/dynamodb-local
+    ports:
+      - "8000:8000"
+    volumes:
+      - dynamodb-data:/dynamodb_local_db
+
+  app:
+    <<: *base
+    hostname: app
+    command: npm run serve
+    environment: &env
+      NODE_ENV: development
+      BASE_URL: 'http://wl-staging-1047052393.us-east-1.elb.amazonaws.com/v1'
+      GN_USER: 'vuori2'
+      GN_PASSWORD: 'vuori2017'
+      GN_URL: 'http://177.190.148.69:88/ApiecommerceV2'
+      AWS_REGION: 'us-east-1'
+    ports:
+      - '3001:80'
+    depends_on:
+      - dynamo
+
+  specs:
+    <<: *base
+    command: /bin/ash -c "npm test"
+    environment:
+      <<: *env
+      NODE_ENV: test
+      BASE_URL: 'https://wl-frente.zrp.com.br/v1'
+      GN_USER: 'vuori2'
+      GN_PASSWORD: 'vuori2017'
+      GN_URL: 'http://177.190.148.69:88/ApiecommerceV2'
+      AWS_REGION: 'us-east-1'
+    depends_on:
+      - dynamo
+
+  lint:
+    <<: *base
+    command: /bin/ash -c "npm run lint"
