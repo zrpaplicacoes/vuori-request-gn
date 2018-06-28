@@ -36,7 +36,7 @@ services:
       BASE_URL: 'http://wl-staging-1047052393.us-east-1.elb.amazonaws.com/v1'
       GN_USER: 'vuori2'
       GN_PASSWORD: 'vuori2017'
-      GN_URL: 'http://177.190.148.69:88/ApiecommerceV2'
+      GN_URL: 'https://cambio.vuori.com.br/FRENTE/ApiEcommerceV2'
       AWS_REGION: 'us-east-1'
     ports:
       - '3001:80'
@@ -52,7 +52,7 @@ services:
       BASE_URL: 'https://wl-frente.zrp.com.br/v1'
       GN_USER: 'vuori2'
       GN_PASSWORD: 'vuori2017'
-      GN_URL: 'http://177.190.148.69:88/ApiecommerceV2'
+      GN_URL: 'https://cambio.vuori.com.br/FRENTE/ApiEcommerceV2'
       AWS_REGION: 'us-east-1'
     depends_on:
       - dynamo

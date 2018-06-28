@@ -11,7 +11,7 @@ module.exports = {
     } = config;
 
     const awsRegion = region || 'us-east-1';
-    this.configAws(awsRegion);
+    this.configAws(awsRegion, env);
 
 
     let awsConfig = {
@@ -29,15 +29,15 @@ module.exports = {
     await this.setup(endpoint);
   },
 
-  configAws(region) {
+  configAws(region, env) {
     AWS.config.update({
       region: region,
     });
 
-    this.setupDevKeys();
+    this.setupDevKeys(env);
   },
 
-  setupDevKeys() {
+  setupDevKeys(env) {
     if (env !== 'production') {
       AWS.config.update({
         accessKeyId: 'dummy',
