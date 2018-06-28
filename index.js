@@ -63,7 +63,7 @@ class RequestGn {
       },
       data,
     };
-    
+
     const result = await this.apiRequest(options);
     return result;
   }
@@ -77,9 +77,17 @@ class RequestGn {
         'Content-Type': 'application/json',
       },
     };
-    
-    const result = await this.apiRequest(options);
-    return result;
+
+    try {
+      const result = await this.apiRequest(options);
+      return result;
+    } catch (err) {
+      if (err.response.status === 404) {
+        return {status: 404, message: 'Usuário não encontrado'};
+      }
+
+      throw err;
+    }
   }
 
   async apiRequest(options) {
