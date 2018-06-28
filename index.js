@@ -8,16 +8,16 @@ const {
 } = require('./services/vuoriConfiguration')();
 
 class RequestGn {
-  constructor(requestOptions, credentials) {
-    this.requestOptions = requestOptions;
-    this.GN_PASSWORD = credentials.GN_PASSWORD;
-    this.GN_USER = credentials.GN_USER;
+  constructor(config) {
+    this.baseURL = config.baseURL;
+    this.GN_PASSWORD = config.GN_PASSWORD;
+    this.GN_USER = config.GN_USER;
     this.axios = axios;
-    this.axios.defaults.baseURL = requestOptions.baseURL;
     this._axiosRequest();
     this._axiosResponse();
 
     this.gnAuthenticateRequest = axios.create({
+      baseURL: this.baseURL,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
@@ -35,12 +35,58 @@ class RequestGn {
         throw error
       });
   }
-  async apiRequest() {
+
+  async getProductsByAgent(agentCode) {
+    const options = {
+      url: '/api/ecommerce/v2/produto/tipo/ESPECIE',
+      method: 'get',
+      baseURL:  this.baseURL,
+      params: {
+        cdAgente: agentCode,
+      },
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    };
+
+    const result = await this.apiRequest(options);
+    return result;
+  }
+
+  async saveClient(data) {
+    const options = {
+      url: '/api/ecommerce/v2/cliente',
+      method: 'post',
+      baseURL:  this.baseURL,
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+      data,
+    };
+    
+    const result = await this.apiRequest(options);
+    return result;
+  }
+
+  async getClient(clientCpf) {
+    const options = {
+      url: `/api/ecommerce/v2/cliente/${clientCpf}`,
+      method: 'get',
+      baseURL:  this.baseURL,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    
+    const result = await this.apiRequest(options);
+    return result;
+  }
+
+  async apiRequest(options) {
     let response;
     try {
-      response = await axios.request(this.requestOptions);
+      response = await axios.request(options);
     } catch (error) {
-      logger.error(error);
       throw error;
     }
     return response;

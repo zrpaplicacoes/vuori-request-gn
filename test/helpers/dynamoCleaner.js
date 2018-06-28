@@ -1,14 +1,14 @@
 const dynamoAdapter = require('./../../config/dynamoAdapter');
-const {VuoriConfiguration} = require('./../../models/');
+const {VuoriConfiguration} = require('./../../models');
 const DatabaseCleaner = {
-  async connect() {
-    return dynamoAdapter.connect();
+  async connect(config) {
+    return dynamoAdapter.connect(config);
   },
 
-  async clean() {
-    await this.connect();
+  async clean(config) {
+    await this.connect(config);
     await this.destroyDatabases();
-    await this.connect();
+    await this.connect(config);
   },
 
   destroyDatabases() {

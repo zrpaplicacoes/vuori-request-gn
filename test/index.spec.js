@@ -9,29 +9,30 @@ const {
 
 describe('requestGn service test', () => {
   let options;
+  let credentials;
   beforeAll(async () => {
-    options = {
-      url: '/api/ecommerce/v2/produto/tipo/ESPECIE/',
-      method: 'get',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
+
+    config = {
+      GN_PASSWORD: process.env.GN_PASSWORD,
+      GN_USER: process.env.GN_USER,
+      baseURL: process.env.GN_URL,
     };
-    await dynamoCleaner.clean();
+
+    const dbConfig = {
+      endpoint: "http://dynamo:8000'",
+      env: "test",
+    };
+    await dynamoCleaner.clean(dbConfig);
   }, 7000);
 
   describe('test a vuori request with a invalid token in database', () => {
     let response;
     beforeAll(async () => {
-      const requestGn = new RequestGn(options);
-      await saveToken('InvalidToken');
-      response = await requestGn.apiRequest();
       let hasRequestedOnce = false;
-
       nock(process.env.GN_URL)
         .log(console.log)
         .persist()
-        .get('/api/ecommerce/v2/produto/tipo/ESPECIE/')
+        .get('/api/ecommerce/v2/produto/tipo/ESPECIE?cdAgente=AG+145')
         .reply(() => {
           if (hasRequestedOnce) {
             return [
@@ -49,6 +50,11 @@ describe('requestGn service test', () => {
         })
         .post('/api/ecommerce/v2/token')
         .reply(200, vuoriToken);
+
+      const requestGn = new RequestGn(config);
+      await saveToken('InvalidToken');
+      response = await requestGn.getProductsByAgent('AG 145');
+
     });
     test('should be a valid request', () => {
       expect(response.status).toEqual(200);
@@ -59,14 +65,14 @@ describe('requestGn service test', () => {
     let response;
     beforeAll(async () => {
       nock(process.env.GN_URL)
-      .log(console.log)
-      .persist()
-      .get('/api/ecommerce/v2/produto/tipo/ESPECIE/')
-      .reply(200, vuoriResponse)
-      .post('/api/ecommerce/v2/token')
-      .reply(200, vuoriToken);
-      const requestGn = new RequestGn(options);
-      response = await requestGn.apiRequest();
+        .log(console.log)
+        .persist()
+        .get('/api/ecommerce/v2/produto/tipo/ESPECIE?cdAgente=AG+145')
+        .reply(200, vuoriResponse)
+        .post('/api/ecommerce/v2/token')
+        .reply(200, vuoriToken);
+      const requestGn = new RequestGn(config);
+      response = await requestGn.getProductsByAgent('AG 145');
     });
     test('should be a valid request', () => {
       expect(response.status).toEqual(200);
@@ -76,16 +82,15 @@ describe('requestGn service test', () => {
     let response;
     beforeAll(async () => {
       nock(process.env.GN_URL)
-      .log(console.log)
-      .persist()
-      .get('/api/ecommerce/v2/produto/tipo/ESPECIE/')
-      .reply(200, vuoriResponse)
-      .post('/api/ecommerce/v2/token')
-      .reply(200, vuoriToken);
-
-      const requestGn = new RequestGn(options);
+        .log(console.log)
+        .persist()
+        .get('/api/ecommerce/v2/produto/tipo/ESPECIE?cdAgente=AG+145')
+        .reply(200, vuoriResponse)
+        .post('/api/ecommerce/v2/token')
+        .reply(200, vuoriToken);
+      const requestGn = new RequestGn(config);
       await requestGn.authenticateGn();
-      response = await requestGn.apiRequest();
+      response = await requestGn.getProductsByAgent("AG 145");
     });
     test('should be a valid request', () => {
       expect(response.status).toEqual(200);
