@@ -20,6 +20,13 @@ const requestGn = new RequestGn({
       baseURL: process.env.GN_URL,
 });
 
+const dbConfig = {
+      endpoint: "http://dynamo:8000'",
+      env: "development",
+};
+
+await requestGN.dbConnect(dbConfig),
+
 response = await requestGn.getProductsByAgent('AG 145');
 ```
 
