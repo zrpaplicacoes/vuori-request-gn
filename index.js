@@ -68,6 +68,21 @@ class RequestGn {
     return result;
   }
 
+  async saveTransaction(data) {
+    const options = {
+      url: '/api/ecommerce/v2/boleto',
+      method: 'post',
+      baseURL:  this.baseURL,
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+      data,
+    };
+    
+    const result = await this.apiRequest(options);
+    return result;
+  }
+
   async getClient(clientCpf) {
     const options = {
       url: `/api/ecommerce/v2/cliente/${clientCpf}`,
