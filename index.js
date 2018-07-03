@@ -25,22 +25,14 @@ class RequestGn {
   };
 
   async dbConnect(config) {
-    dynamoAdapter.connect(config)
-      .then(() => {
-        server.listen(port);
-        server.on('error', onError);
-        server.on('listening', onListening);
-      })
-      .catch((error) => {
-        throw error
-      });
+    await dynamoAdapter.connect(config)
   }
 
   async getProductsByAgent(agentCode) {
     const options = {
       url: '/api/ecommerce/v2/produto/tipo/ESPECIE',
       method: 'get',
-      baseURL:  this.baseURL,
+      baseURL: this.baseURL,
       params: {
         cdAgente: agentCode,
       },
@@ -57,7 +49,7 @@ class RequestGn {
     const options = {
       url: '/api/ecommerce/v2/cliente',
       method: 'post',
-      baseURL:  this.baseURL,
+      baseURL: this.baseURL,
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
       },
@@ -68,11 +60,25 @@ class RequestGn {
     return result;
   }
 
+  async saveTransaction(data) {
+    const options = {
+      url: '/api/ecommerce/v2/boleto',
+      method: 'post',
+      baseURL: this.baseURL,
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+      data,
+    };
+    const result = await this.apiRequest(options);
+    return result;
+  }
+
   async getClient(clientCpf) {
     const options = {
       url: `/api/ecommerce/v2/cliente/${clientCpf}`,
       method: 'get',
-      baseURL:  this.baseURL,
+      baseURL: this.baseURL,
       headers: {
         'Content-Type': 'application/json',
       },
@@ -85,9 +91,8 @@ class RequestGn {
       if (err.response.status === 404) {
         return {status: 404, message: 'Usuário não encontrado'};
       }
-
       throw err;
-    }
+    };
   }
 
   async apiRequest(options) {
