@@ -29,7 +29,7 @@ class RequestGn {
   }
 
   async getProductsByAgent(agentCode) {
-    const options = {
+    this.options = {
       url: '/api/ecommerce/v2/produto/tipo/ESPECIE',
       method: 'get',
       baseURL: this.baseURL,
@@ -41,12 +41,12 @@ class RequestGn {
       },
     };
 
-    const result = await this.apiRequest(options);
+    const result = await this._apiRequest();
     return result;
   }
 
   async saveClient(data) {
-    const options = {
+    this.options = {
       url: '/api/ecommerce/v2/cliente',
       method: 'post',
       baseURL: this.baseURL,
@@ -56,12 +56,12 @@ class RequestGn {
       data,
     };
 
-    const result = await this.apiRequest(options);
+    const result = await this._apiRequest();
     return result;
   }
 
   async saveTransaction(data) {
-    const options = {
+    this.options = {
       url: '/api/ecommerce/v2/boleto',
       method: 'post',
       baseURL: this.baseURL,
@@ -70,12 +70,13 @@ class RequestGn {
       },
       data,
     };
-    const result = await this.apiRequest(options);
+
+    const result = await this._apiRequest();
     return result;
   }
 
   async getClient(clientCpf) {
-    const options = {
+    this.options = {
       url: `/api/ecommerce/v2/cliente/${clientCpf}`,
       method: 'get',
       baseURL: this.baseURL,
@@ -85,7 +86,7 @@ class RequestGn {
     };
 
     try {
-      const result = await this.apiRequest(options);
+      const result = await this._apiRequest();
       return result;
     } catch (err) {
       if (err.response.status === 404) {
@@ -95,10 +96,10 @@ class RequestGn {
     };
   }
 
-  async apiRequest(options) {
+  async _apiRequest() {
     let response;
     try {
-      response = await axios.request(options);
+      response = await axios.request(this.options);
     } catch (error) {
       throw error;
     }
@@ -156,19 +157,19 @@ class RequestGn {
     }
     throw error;
   };
-  async _handlerUnauthorizedError(responseError) {
+  async _handlerUnauthorizedError() {
     try {
       await this.authenticateGn();
-      const result = await this.apiRequest();
+      const result = await this._apiRequest();
       return result;
     } catch (err) {
       return Promise.reject(err);
     }
   }
-  async _handlerNotFoundError(responseError) {
+  async _handlerNotFoundError() {
     try {
       await this.authenticateGn();
-      const result = await this.apiRequest();
+      const result = await this._apiRequest();
       return result;
     } catch (err) {
       return Promise.reject(err);
