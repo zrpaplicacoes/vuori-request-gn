@@ -29,7 +29,7 @@ class RequestGn {
   }
 
   async getProductsByAgent(agentCode) {
-    const options = {
+    this.options = {
       url: '/api/ecommerce/v2/produto/tipo/ESPECIE',
       method: 'get',
       baseURL: this.baseURL,
@@ -41,7 +41,7 @@ class RequestGn {
       },
     };
 
-    const result = await this.apiRequest(options);
+    const result = await this._apiRequest();
     return result;
   }
 
@@ -56,7 +56,7 @@ class RequestGn {
       data,
     };
 
-    const result = await this.apiRequest(this.options);
+    const result = await this._apiRequest();
     return result;
   }
 
@@ -71,7 +71,7 @@ class RequestGn {
       data,
     };
 
-    const result = await this.apiRequest(this.options);
+    const result = await this._apiRequest();
     return result;
   }
 
@@ -85,11 +85,18 @@ class RequestGn {
       },
     };
 
-    const result = await this.apiRequest(this.options);
-    return result;
+    try {
+      const result = await this._apiRequest();
+      return result;
+    } catch (err) {
+      if (err.response.status === 404) {
+        return {status: 404, message: 'Usuário não encontrado'};
+      }
+      throw err;
+    };
   }
 
-  async apiRequest(options) {
+  async _apiRequest() {
     let response;
     try {
       response = await axios.request(this.options);
@@ -153,7 +160,7 @@ class RequestGn {
   async _handlerUnauthorizedError() {
     try {
       await this.authenticateGn();
-      const result = await this.apiRequest();
+      const result = await this._apiRequest();
       return result;
     } catch (err) {
       return Promise.reject(err);
@@ -162,7 +169,7 @@ class RequestGn {
   async _handlerNotFoundError() {
     try {
       await this.authenticateGn();
-      const result = await this.apiRequest();
+      const result = await this._apiRequest();
       return result;
     } catch (err) {
       return Promise.reject(err);
