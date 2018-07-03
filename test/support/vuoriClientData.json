@@ -1,0 +1,23 @@
+{
+  "Nome": "TESTE TESTINHA DA SILVA",
+  "Documento": "085.046.233-94",
+  "Rg": "276.505.213-2",
+  "Email": "sergiop@conam.eng.br",
+  "Endereco": "RUA CONSELHEIRO FERNANDES TORRES",
+  "Numero": "50 - APTO.71",
+  "Bairro": "PACAEMBU",
+  "Cidade": "SÃO PAULO",
+  "Estado": "SP",
+  "Cep": "01235020",
+  "DddTelefone": "11",
+  "Telefone": "37148611",
+  "DddCelular": "11",
+  "Celular": "981931007",
+  "Bloqueio": "N",
+  "LojaVirtual": false,
+  "DtNascimento": "1958-03-02T00:00:00",
+  "DtInclusao": "2017-07-04T00:00:00",
+  "Comissionado": "",
+  "CdFilial": "007"
+  
+}

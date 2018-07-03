@@ -99,7 +99,7 @@ class RequestGn {
   async _apiRequest() {
     let response;
     try {
-      response = await axios.request(this.options);
+      response = await this.axios.request(this.options);
     } catch (error) {
       throw error;
     }
@@ -138,7 +138,7 @@ class RequestGn {
   }
 
   _axiosResponse() {
-    axios.interceptors.response.use((response) => {
+    this.axios.interceptors.response.use((response) => {
       return response;
     }, async (error) => {
       const result = await this._errorHandler(error);
@@ -155,7 +155,7 @@ class RequestGn {
       const result = await this._handlerNotFoundError();
       return result;
     }
-    throw error;
+    return Promise.reject(error);
   };
   async _handlerUnauthorizedError() {
     try {
