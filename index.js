@@ -60,6 +60,22 @@ class RequestGn {
     return result;
   }
 
+  async editClient(data) {
+    this.options = {
+      url: '/api/ecommerce/v2/cliente',
+      method: 'put',
+      baseURL: this.baseURL,
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+      data,
+    };
+
+    const result = await this._apiRequest();
+    return result;
+  }
+
+
   async saveTransaction(data) {
     this.options = {
       url: '/api/ecommerce/v2/boleto',
