@@ -34,4 +34,5 @@ response = await requestGn.getProductsByAgent('AG 145');
 - getProductsByAgent(agentCode)
 - saveClient(clientData)
 - getClient(cpf)
+- editClient(clientData)
 - saveTransaction(transactionData)
