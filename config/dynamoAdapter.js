@@ -38,7 +38,7 @@ module.exports = {
   },
 
   setupDevKeys(env) {
-    if (env !== 'production') {
+    if (env !== 'production' && env !== 'staging') {
       AWS.config.update({
         accessKeyId: 'dummy',
         secretAccessKey: 'dummy',
