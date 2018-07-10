@@ -1,0 +1,20 @@
+{
+  "IdBoleto": "asdasd221",
+  "CdProduto": "USD",
+  "CdTipoProduto": "ESPECIE",
+  "CdStatus": "P",
+  "ValorMe": 100,
+  "ValorMn": 323.40,
+  "ValorTaxa": 3.23398,
+  "IdTaxa": "e58c6624-7782-45ac-b553-892496e9a996",  
+  "ValorDespesa": 0,
+  "LocalEntrega": "DELIVERY",  
+  "FormaMn": "TED",
+  "Iof": 3.56,
+  "CdFormaEntregaMe": "50",
+  "DtVenda": "2018-07-10T00:00:00",
+"CdCliente": "040809 001",
+"IdClienteEntrega": 1279,
+"CdFilial": "007",
+"CdAgente": "SILVIO"
+}
