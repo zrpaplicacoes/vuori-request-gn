@@ -1,11 +1,11 @@
 const RequestGn = require('./../index');
 const dynamoCleaner = require('./helpers/dynamoCleaner');
 const nock = require('nock');
-const vuoriTransactionData = require('./support/vuoriClientData.json');
+const vuoriDeliveryAddressData = require('./support/vuoriDeliveryAddressData.json');
 const vuoriToken = require('./support/vuoriTokenResponse.json');
-const vuoriResponse= require('./support/vuoriSucessTransactionResponse.json');
+const vuoriResponse= require('./support/vuoriSucessDeliveryAddressResponse.json');
 
-describe('test a vuori request for a save transaction', () => {
+describe('test a vuori request for a save delivery address', () => {
   let options;
   let credentials;
   beforeAll(async () => {
@@ -22,17 +22,17 @@ describe('test a vuori request for a save transaction', () => {
     };
     await dynamoCleaner.clean(dbConfig);
   }, 7000);
-  describe('with a valid request ', () => {
+  describe('with a valid request', () => {
     let response;
     beforeAll(async () => {
       nock(process.env.GN_URL)
-        .post('/api/ecommerce/v2/boleto')
+        .post('/api/ecommerce/v2/clienteentrega')
         .reply(200, vuoriResponse)
         .post('/api/ecommerce/v2/token')
         .reply(200, vuoriToken);
       const requestGn = new RequestGn(config);
       try {
-        response = await requestGn.saveTransaction(vuoriTransactionData);
+        response = await requestGn.saveDeliveryAddress(vuoriDeliveryAddressData);
       } catch (error) {
         response = error.response;
       }

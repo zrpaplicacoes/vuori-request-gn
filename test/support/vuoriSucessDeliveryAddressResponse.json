@@ -1,0 +1,14 @@
+{
+  "Id": "adsada1312",
+  "CdCliente": "040300 001",
+  "Endereco": "Rua Inhambu",
+  "Numero": "632",
+  "Complemento": "apt 54",
+  "Bairro": "Moema",
+  "Cidade": "Sao Paulo",
+  "Cep": "04520012",
+  "Telefone": "1231231231",
+  "Responsavel": "Teste de Responsavel",
+  "Estado": "SP",
+  "Principal": "N"
+  }
