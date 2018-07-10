@@ -45,6 +45,36 @@ class RequestGn {
     return result;
   }
 
+  async saveDeliveryAddress(data) {
+    this.options = {
+      url: '/api/ecommerce/v2/clienteentrega',
+      method: 'post',
+      baseURL: this.baseURL,
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+      data,
+    };
+
+    const result = await this._apiRequest();
+    return result;
+  }
+
+  async saveTransaction(data) {
+    this.options = {
+      url: '/api/ecommerce/v2/boleto',
+      method: 'post',
+      baseURL: this.baseURL,
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+      data,
+    };
+
+    const result = await this._apiRequest();
+    return result;
+  }
+
   async saveClient(data) {
     this.options = {
       url: '/api/ecommerce/v2/cliente',
@@ -76,20 +106,6 @@ class RequestGn {
   }
 
 
-  async saveTransaction(data) {
-    this.options = {
-      url: '/api/ecommerce/v2/boleto',
-      method: 'post',
-      baseURL: this.baseURL,
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8',
-      },
-      data,
-    };
-
-    const result = await this._apiRequest();
-    return result;
-  }
 
   async getClient(clientCpf) {
     this.options = {
@@ -106,7 +122,10 @@ class RequestGn {
       return result;
     } catch (err) {
       if (err.response.status === 404) {
-        return {status: 404, message: 'Usuário não encontrado'};
+        return {
+          status: 404,
+          message: 'Usuário não encontrado'
+        };
       }
       throw err;
     };
