@@ -18,7 +18,7 @@ module.exports = {
       apiVersion: '2012-08-10',
     };
 
-    if (env !== 'production') {
+    if (env !== 'production' && env !== 'staging') {
       awsConfig = Object.assign(config, {
         endpoint,
       });
