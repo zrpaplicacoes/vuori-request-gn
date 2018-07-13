@@ -1,11 +1,11 @@
 const querystring = require('querystring');
 const dynamoAdapter = require('./config/dynamoAdapter');
 const axios = require('axios');
+const configurationFunctions = require('./services/vuoriConfiguration');
 
 const {
-  saveToken,
-  getToken,
-} = require('./services/vuoriConfiguration')();
+  VuoriConfiguration
+} = require('./models');
 
 class RequestGn {
   constructor(config) {
@@ -13,6 +13,29 @@ class RequestGn {
     this.GN_PASSWORD = config.GN_PASSWORD;
     this.GN_USER = config.GN_USER;
     this.axios = axios;
+  };
+
+  useDb(dynamoAwsInstance) {
+    dynamoAdapter.use(dynamoAwsInstance);
+    VuoriConfiguration.config({ dynamodb: dynamoAwsInstance });
+    console.log('using db instance');
+
+    this._setupInstance();
+  }
+
+  async dbConnect(config) {
+    await dynamoAdapter.connect(config)
+    this._setupInstance();
+  }
+
+  _setupInstance() {
+    const {
+      saveToken,
+      getToken,
+    } = configurationFunctions();
+
+    this.saveToken = saveToken;
+    this.getToken = getToken;
     this._axiosRequest();
     this._axiosResponse();
 
@@ -22,11 +45,8 @@ class RequestGn {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
     });
-  };
-
-  async dbConnect(config) {
-    await dynamoAdapter.connect(config)
   }
+
 
   async getProductsByAgent(agentCode) {
     this.options = {
@@ -121,6 +141,7 @@ class RequestGn {
       const result = await this._apiRequest();
       return result;
     } catch (err) {
+      console.log('Error in request', err);
       if (err.response.status === 404) {
         return {
           status: 404,
@@ -152,7 +173,14 @@ class RequestGn {
   };
 
   async _addAcessTokenToRequest(config) {
-    const vuoriAccessToken = await getToken();
+    let vuoriAccessToken;
+
+    try {
+      vuoriAccessToken = await this.getToken();
+    } catch (err) {
+      console.log('Error while trying to retrieve token: ', err);
+    }
+
     if (!vuoriAccessToken) {
       const error = 'NotFound';
       throw error;
@@ -222,7 +250,7 @@ class RequestGn {
         '/api/ecommerce/v2/token',
         reqBody,
       );
-      const accessToken = await saveToken(responseToken.data.access_token);
+      const accessToken = await this.saveToken(responseToken.data.access_token);
       return accessToken;
     } catch (error) {
       throw error;

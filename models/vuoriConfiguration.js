@@ -1,6 +1,7 @@
 const dynogels = require('dynogels');
 const Joi = require('joi');
 
+console.log('defining models...');
 const VuoriConfiguration = dynogels.define('VuoriConfiguration', {
   hashKey: 'config',
   timestamps: true,

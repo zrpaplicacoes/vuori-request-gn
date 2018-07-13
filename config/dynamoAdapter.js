@@ -1,8 +1,11 @@
 const AWS = require('aws-sdk');
 const dynogels = require('dynogels');
 
-
 module.exports = {
+  async use(db) {
+    dynogels.dynamoDriver(db);
+  },
+
   async connect(config) {
     const {
       endpoint,
@@ -24,10 +27,8 @@ module.exports = {
       });
     };
 
-    console.log('AWS config is: ', awsConfig);
     const db = new AWS.DynamoDB(awsConfig);
     dynogels.dynamoDriver(db);
-    console.log('Start setup...');
     await this.setup(endpoint);
   },
 
@@ -51,7 +52,6 @@ module.exports = {
 
   async setup(endpoint) {
     return new Promise((resolve, reject) => {
-      console.log('Start setup...');
       dynogels.createTables((err) => {
         if (err) {
           console.log('ERROR while creating tables: ', err);
