@@ -1,4 +1,4 @@
-const RequestGn = require('./../index');
+const RequestGn = require('./../index').RequestGn;
 const dynamoCleaner = require('./helpers/dynamoCleaner');
 const nock = require('nock');
 const vuoriClientData = require('./support/vuoriClientData.json');
@@ -31,8 +31,9 @@ describe('test a vuori request for a user', () => {
         .post('/api/ecommerce/v2/token')
         .reply(200, vuoriToken);
       const requestGn = new RequestGn(config);
+      requestGn.setup();
       try {
-        response = await requestGn.saveClient(vuoriClientData); 
+        response = await requestGn.saveClient(vuoriClientData);
       } catch (error) {
         response = error.response;
       }
@@ -50,6 +51,7 @@ describe('test a vuori request for a user', () => {
         .post('/api/ecommerce/v2/token')
         .reply(200, vuoriToken);
       const requestGn = new RequestGn(config);
+      requestGn.setup();
       response = await requestGn.saveClient(vuoriClientData);
     });
     test('should be a created request', () => {

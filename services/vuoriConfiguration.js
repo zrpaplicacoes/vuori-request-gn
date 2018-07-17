@@ -1,24 +1,15 @@
 const {
   promisify
 } = require('util');
-
-const {
-  VuoriConfiguration
-} = require('./../models');
-const saveTokenPromisse = promisify(VuoriConfiguration.create);
-const getTokenPromisse = promisify(VuoriConfiguration.get);
+const logger = require('./logger');
 
 module.exports = function () {
+  const { VuoriConfiguration } = require('./../models');
+  const saveTokenPromisse = promisify(VuoriConfiguration.create);
+  const getTokenPromisse = promisify(VuoriConfiguration.get);
+
   return {
     saveToken(accessToken) {
-      VuoriConfiguration.create({
-        config: 'access-token',
-        value: accessToken
-      }, (err, acc) => {
-        if (err) {
-          throw err;
-        };
-      });
       return saveTokenPromisse({
         config: 'access-token',
         value: accessToken
