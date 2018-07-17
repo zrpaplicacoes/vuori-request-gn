@@ -162,7 +162,6 @@ class RequestGn {
     let vuoriAccessToken;
 
     try {
-      logger.debug('Querying for access token...');
       vuoriAccessToken = await this.getToken();
       logger.debug(`Access token: ${vuoriAccessToken}`);
     } catch (err) {
