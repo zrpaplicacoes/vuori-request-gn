@@ -1,6 +1,6 @@
 {
   "name": "vuori-request-gn",
-  "version": "0.0.30",
+  "version": "0.0.39",
   "description": "Package to connect with Vuori GN API",
   "main": "index.js",
   "directories": {
@@ -14,7 +14,8 @@
     "url": "git+https://github.com/zrpaplicacoes/vuori-request-gn.git"
   },
   "contributors": [
-    "Gustavo Rodarte Joaquim <guga.rodarte@live.com> (https://github.com/gustavorodarte)"
+    "Gustavo Rodarte Joaquim <guga.rodarte@live.com> (https://github.com/gustavorodarte)",
+    "Rafael Trostli Costella <rafael.costella@zrp.com.br> (https://github.com/RafaelTCostella)"
   ],
   "author": "Zrp Aplicações",
   "license": "MIT",
@@ -32,6 +33,7 @@
     "axios": "^0.18.0",
     "dynogels": "^9.0.0",
     "joi": "^13.4.0",
-    "querystring": "^0.2.0"
+    "querystring": "^0.2.0",
+    "winston": "^3.0.0"
   }
 }

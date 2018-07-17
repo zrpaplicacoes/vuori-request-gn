@@ -1,4 +1,4 @@
-const RequestGn = require('./../index');
+const RequestGn = require('./../index').RequestGn;
 const dynamoCleaner = require('./helpers/dynamoCleaner');
 const nock = require('nock');
 const vuoriDeliveryAddressData = require('./support/vuoriDeliveryAddressData.json');
@@ -31,6 +31,7 @@ describe('test a vuori request for a save delivery address', () => {
         .post('/api/ecommerce/v2/token')
         .reply(200, vuoriToken);
       const requestGn = new RequestGn(config);
+      requestGn.setup();
       try {
         response = await requestGn.saveDeliveryAddress(vuoriDeliveryAddressData);
       } catch (error) {

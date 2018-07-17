@@ -1,65 +1,58 @@
 const AWS = require('aws-sdk');
 const dynogels = require('dynogels');
+const logger = require('../services/logger');
 
 module.exports = {
   async use(db) {
     dynogels.dynamoDriver(db);
+    await this.setup();
   },
 
   async connect(config) {
     const {
       endpoint,
-      region,
-      env
+      region
     } = config;
 
-    const awsRegion = region || 'us-east-1';
-    this.configAws(awsRegion, env);
-
+    this.setupDevKeys(region);
 
     let awsConfig = {
       apiVersion: '2012-08-10',
     };
 
-    if (env !== 'production' && env !== 'staging') {
-      awsConfig = Object.assign(config, {
-        endpoint,
-      });
-    };
+    awsConfig = Object.assign(config, {
+      endpoint,
+    });
 
     const db = new AWS.DynamoDB(awsConfig);
     dynogels.dynamoDriver(db);
+
     await this.setup(endpoint);
   },
 
-  configAws(region, env) {
+  setupDevKeys(awsRegion = 'us-east-1') {
     AWS.config.update({
-      region: region,
+      accessKeyId: 'dummy',
+      secretAccessKey: 'dummy',
+      region: awsRegion
     });
-
-    this.setupDevKeys(env);
   },
 
-  setupDevKeys(env) {
-    if (env !== 'production' && env !== 'staging') {
-      AWS.config.update({
-        accessKeyId: 'dummy',
-        secretAccessKey: 'dummy',
-        region: 'us-east-1',
-      });
-    }
-  },
-
-  async setup(endpoint) {
+  async setup(endpoint = undefined) {
     return new Promise((resolve, reject) => {
       dynogels.createTables((err) => {
         if (err) {
-          console.log('ERROR while creating tables: ', err);
+          logger.error('error in createTables', err);
           reject(err);
           return;
         }
         resolve(true);
-        console.info(`using dynamodb at: ${endpoint}`);
+
+        if (endpoint) {
+          logger.info(`using dynamodb at: ${endpoint}`);
+        } else {
+          logger.info('using dynamodb with policies');
+        }
       });
     });
   },

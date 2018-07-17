@@ -1,4 +1,4 @@
-const RequestGn = require('./../index');
+const RequestGn = require('./../index').RequestGn;
 const dynamoCleaner = require('./helpers/dynamoCleaner');
 const nock = require('nock');
 const vuoriResponse = require('./support/vuoriSucessProductsResponse.json');
@@ -30,6 +30,7 @@ describe('test a vuori request for a user', () => {
         .post('/api/ecommerce/v2/token')
         .reply(200, vuoriToken);
       const requestGn = new RequestGn(config);
+      requestGn.setup();
       response = await requestGn.getClient('00000000000');
     });
     test('should be a not found request', () => {
@@ -45,6 +46,7 @@ describe('test a vuori request for a user', () => {
         .post('/api/ecommerce/v2/token')
         .reply(200, vuoriToken);
       const requestGn = new RequestGn(config);
+      requestGn.setup();
       response = await requestGn.getClient('01234567890');
     });
     test('should be a valid request', () => {

@@ -1,15 +1,13 @@
-const RequestGn = require('./../index');
+const RequestGn = require('./../index').RequestGn;
+const Database = require('./../index').Database;
 const dynamoCleaner = require('./helpers/dynamoCleaner');
 const nock = require('nock');
 const vuoriResponse = require('./support/vuoriSucessProductsResponse.json');
 const vuoriToken = require('./support/vuoriTokenResponse.json');
-const {
-  saveToken,
-} = require('./../services/vuoriConfiguration')();
+const dynamoFunctions = require('./../services/vuoriConfiguration');
 
 describe('requestGn service test', () => {
-  let options;
-  let credentials;
+  let saveToken;
   beforeAll(async () => {
 
     config = {
@@ -23,6 +21,8 @@ describe('requestGn service test', () => {
       env: "test",
     };
     await dynamoCleaner.clean(dbConfig);
+    Database.dbConnect(dbConfig);
+    saveToken = dynamoFunctions().saveToken;
   }, 7000);
 
   describe('test a vuori request with a invalid token in database', () => {
@@ -52,6 +52,7 @@ describe('requestGn service test', () => {
         .reply(200, vuoriToken);
 
       const requestGn = new RequestGn(config);
+      requestGn.setup();
       await saveToken('InvalidToken');
       response = await requestGn.getProductsByAgent('AG 145');
 
@@ -72,6 +73,7 @@ describe('requestGn service test', () => {
         .post('/api/ecommerce/v2/token')
         .reply(200, vuoriToken);
       const requestGn = new RequestGn(config);
+      requestGn.setup();
       response = await requestGn.getProductsByAgent('AG 145');
     });
     test('should be a valid request', () => {
@@ -90,6 +92,7 @@ describe('requestGn service test', () => {
         .post('/api/ecommerce/v2/token')
         .reply(200, vuoriToken);
       const requestGn = new RequestGn(config);
+      requestGn.setup();
       await requestGn.authenticateGn();
       response = await requestGn.getProductsByAgent("AG 145");
     });
