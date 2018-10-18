@@ -30,7 +30,6 @@ describe('requestGn service test', () => {
     beforeAll(async () => {
       let hasRequestedOnce = false;
       nock(process.env.GN_URL)
-        .log(console.log)
         .persist()
         .get('/api/ecommerce/v2/produto/tipo/ESPECIE?cdAgente=AG+145')
         .reply(() => {
@@ -39,14 +38,14 @@ describe('requestGn service test', () => {
               200,
               vuoriResponse,
             ];
-            hasRequestedOnce = true;
-            return [
-              401,
-              {
-                'Message': 'Authorization has been denied for this request.',
-              },
-            ];
           }
+          hasRequestedOnce = true;
+          return [
+            401,
+            {
+              'Message': 'Authorization has been denied for this request.',
+            },
+          ];
         })
         .post('/api/ecommerce/v2/token')
         .reply(200, vuoriToken);
@@ -66,7 +65,6 @@ describe('requestGn service test', () => {
     let response;
     beforeAll(async () => {
       nock(process.env.GN_URL)
-        .log(console.log)
         .persist()
         .get('/api/ecommerce/v2/produto/tipo/ESPECIE?cdAgente=AG+145')
         .reply(200, vuoriResponse)
@@ -85,7 +83,6 @@ describe('requestGn service test', () => {
     let response;
     beforeAll(async () => {
       nock(process.env.GN_URL)
-        .log(console.log)
         .persist()
         .get('/api/ecommerce/v2/produto/tipo/ESPECIE?cdAgente=AG+145')
         .reply(200, vuoriResponse)
