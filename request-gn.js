@@ -140,7 +140,7 @@ class RequestGn {
     try {
       response = await this.axios.request(this.options);
     } catch (error) {
-      logger.error(`error in _apiRequest: ${error}`);
+      logger.error(`error in _apiRequest: ${JSON.stringify(this._serializeError(error))}`);
       throw error;
     }
     return response;
@@ -177,6 +177,13 @@ class RequestGn {
       'Content-Type': 'application/json;charset=UTF-8',
     };
     return config;
+  }
+
+  _serializeError(err) {
+    return {
+      payload: this.options.data,
+      response: err.response.data,
+    };
   }
 
   _requestErrorOutput(error) {

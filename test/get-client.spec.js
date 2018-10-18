@@ -5,8 +5,6 @@ const vuoriResponse = require('./support/vuoriSucessProductsResponse.json');
 const vuoriToken = require('./support/vuoriTokenResponse.json');
 
 describe('test a vuori request for a user', () => {
-  let options;
-  let credentials;
   beforeAll(async () => {
 
     config = {
