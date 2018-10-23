@@ -182,7 +182,7 @@ class RequestGn {
   _serializeError(err) {
     return {
       payload: this.options.data,
-      response: err.response.data,
+      response: err.response ? err.respose.data : '',
     };
   }
 
