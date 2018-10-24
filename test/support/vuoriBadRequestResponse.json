@@ -1,0 +1,9 @@
+{
+  "Message": "The request is invalid.",
+  "ModelState": {
+      "Email": [
+          " - Email deve ser informado",
+          " - Informe um email válido"
+      ]
+  }
+}

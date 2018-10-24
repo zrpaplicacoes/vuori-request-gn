@@ -45,8 +45,13 @@ class RequestGn {
       },
     };
 
-    const result = await this._apiRequest();
-    return result;
+    try {
+      const result = await this._apiRequest();
+      return result;
+    } catch (error) {
+      logger.error(`error in getProductsByAgent: ${JSON.stringify(this._serializeError(error))}`);
+      throw error;
+    }
   }
 
   async saveDeliveryAddress(data) {
@@ -60,8 +65,13 @@ class RequestGn {
       data,
     };
 
-    const result = await this._apiRequest();
-    return result;
+    try {
+      const result = await this._apiRequest();
+      return result;
+    } catch (error) {
+      logger.error(`error in saveDeliveryAddress: ${JSON.stringify(this._serializeError(error))}`);
+      throw error;
+    }
   }
 
   async saveTransaction(data) {
@@ -75,8 +85,13 @@ class RequestGn {
       data,
     };
 
-    const result = await this._apiRequest();
-    return result;
+    try {
+      const result = await this._apiRequest();
+      return result;
+    } catch (error) {
+      logger.error(`error in saveTransaction: ${JSON.stringify(this._serializeError(error))}`);
+      throw error;
+    }
   }
 
   async saveClient(data) {
@@ -90,9 +105,14 @@ class RequestGn {
       data,
     };
 
-    logger.debug(`SaveClient options ${this.options}`);
-    const result = await this._apiRequest();
-    return result;
+    try {
+      logger.debug(`SaveClient options ${this.options}`);
+      const result = await this._apiRequest();
+      return result;
+    } catch (error) {
+      logger.error(`error in saveClient: ${JSON.stringify(this._serializeError(error))}`);
+      throw error;
+    }
   }
 
   async editClient(data) {
@@ -106,8 +126,13 @@ class RequestGn {
       data,
     };
 
-    const result = await this._apiRequest();
-    return result;
+    try {
+      const result = await this._apiRequest();
+      return result;
+    } catch (error) {
+      logger.error(`error in editClient: ${JSON.stringify(this._serializeError(error))}`);
+      throw error;
+    }
   }
 
   async getClient(clientCpf) {
@@ -123,28 +148,36 @@ class RequestGn {
     try {
       const result = await this._apiRequest();
       return result;
-    } catch (err) {
-      logger.error(`error in getClient: ${err}`);
-      if (err.response.status === 404) {
-        return {
-          status: 404,
-          message: 'Usuário não encontrado'
-        };
-      }
-      throw err;
+    } catch (error) {
+      logger.error(`error in getClient: ${JSON.stringify(this._serializeError(error))}`);
+      throw error;
     };
   }
 
   async _apiRequest() {
-    let response;
-    try {
-      response = await this.axios.request(this.options);
-    } catch (error) {
-      logger.error(`error in _apiRequest: ${JSON.stringify(this._serializeError(error))}`);
-      throw error;
-    }
+    const response = await this.axios.request(this.options);
     return response;
   };
+
+  _serializeError(err) {
+    try {
+      if (err.response.status === 404) {
+        return {
+          status: err.response.status,
+          message: 'Não encontrado',
+          url: this.options.url,
+        }
+      } else {
+        return {
+          status: err.response.status,
+          payload: this.options.data,
+          response: err.response.data,
+        };
+      }
+    } catch (error) {
+      return err;
+    }
+  }
 
   _axiosRequest() {
     this.axios.interceptors.request.use(async (config) => {
@@ -177,13 +210,6 @@ class RequestGn {
       'Content-Type': 'application/json;charset=UTF-8',
     };
     return config;
-  }
-
-  _serializeError(err) {
-    return {
-      payload: this.options.data,
-      response: err.response ? err.respose.data : '',
-    };
   }
 
   _requestErrorOutput(error) {

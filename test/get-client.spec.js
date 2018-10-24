@@ -20,7 +20,8 @@ describe('test a vuori request for a user', () => {
     await dynamoCleaner.clean(dbConfig);
   }, 7000);
   describe('with a invalid cpf', () => {
-    let response;
+    let error;
+    let mySpy;
     beforeAll(async () => {
       nock(process.env.GN_URL)
         .get('/api/ecommerce/v2/cliente/00000000000')
@@ -29,10 +30,22 @@ describe('test a vuori request for a user', () => {
         .reply(200, vuoriToken);
       const requestGn = new RequestGn(config);
       requestGn.setup();
-      response = await requestGn.getClient('00000000000');
+
+      mySpy = jest.spyOn(requestGn, '_serializeError');
+
+      try {
+        await requestGn.getClient('00000000000');
+      } catch (err) {
+        error = err;
+      }
     });
     test('should be a not found request', () => {
-      expect(response.status).toEqual(404);
+      expect(mySpy).toHaveReturnedWith({
+        "status": 404,
+        "message": "Não encontrado",
+        "url": "/api/ecommerce/v2/cliente/00000000000"
+      });
+      expect(error.response.status).toEqual(404);
     });
   });
   describe('with a valid cpf', () => {
