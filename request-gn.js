@@ -137,7 +137,7 @@ class RequestGn {
 
   async getClient(clientCpf) {
     this.options = {
-      url: `/api/ecommerce/v2/cliente/${clientCpf}`,
+      url: `/api/ecommerce/v2/cliente/${clientCpf.replace(/[^\d]+/g,'')}`,
       method: 'get',
       baseURL: this.baseURL,
       headers: {
