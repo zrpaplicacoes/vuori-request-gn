@@ -32,6 +32,7 @@ describe('test a vuori request for a user', () => {
       response = await requestGn.getClient('00000000000');
     });
     test('should be a not found request', () => {
+      console.log(response);
       expect(response.status).toEqual(404);
     });
   });

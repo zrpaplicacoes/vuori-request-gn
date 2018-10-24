@@ -1,13 +1,14 @@
 {
   "name": "vuori-request-gn",
-  "version": "0.0.44",
+  "version": "0.0.46",
   "description": "Package to connect with Vuori GN API",
   "main": "index.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "NODE_ENV=test ./node_modules/.bin/jest --runInBand"
+    "test": "NODE_ENV=test ./node_modules/.bin/jest --runInBand --forceExit",
+    "tdd": "NODE_ENV=test ./node_modules/.bin/jest --runInBand --forceExit --watchAll"
   },
   "repository": {
     "type": "git",

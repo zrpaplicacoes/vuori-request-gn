@@ -112,7 +112,7 @@ class RequestGn {
 
   async getClient(clientCpf) {
     this.options = {
-      url: `/api/ecommerce/v2/cliente/${clientCpf}`,
+      url: `/api/ecommerce/v2/cliente/${clientCpf.replace(/[^\d]+/g,'')}`,
       method: 'get',
       baseURL: this.baseURL,
       headers: {
@@ -127,8 +127,8 @@ class RequestGn {
       logger.error(`error in getClient: ${err}`);
       if (err.response.status === 404) {
         return {
-          status: 404,
-          message: 'Usuário não encontrado'
+            status: 404,
+            message: 'Usuário não encontrado',
         };
       }
       throw err;
@@ -182,7 +182,7 @@ class RequestGn {
   _serializeError(err) {
     return {
       payload: this.options.data,
-      response: err.response ? err.respose.data : '',
+      response: err.response ? err.response.data : '',
     };
   }
 
