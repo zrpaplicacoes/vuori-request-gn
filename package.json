@@ -1,6 +1,6 @@
 {
   "name": "vuori-request-gn",
-  "version": "0.0.48",
+  "version": "0.0.49",
   "description": "Package to connect with Vuori GN API",
   "main": "index.js",
   "directories": {
